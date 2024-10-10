@@ -17,6 +17,12 @@ type Question = {
   answers: Answer[];
 };
 
+type APIQuestion = {
+    question: string;
+    correct_answer: string;
+    incorrect_answers: string[];
+  };
+
 // Define the QuizState type
 type QuizState = {
   currentQuestion: number;
@@ -44,7 +50,7 @@ export default function QuizApp() {
           "https://opentdb.com/api.php?amount=10&type=multiple"
         );
         const data = await response.json();
-        const questions = data.results.map((item: any) => {
+        const questions = data.results.map((item: APIQuestion) => {
           const incorrectAnswers = item.incorrect_answers.map(
             (answer: string) => ({
               text: answer,
@@ -71,9 +77,10 @@ export default function QuizApp() {
         console.error("Failed to fetch questions:", error);
       }
     };
-
+  
     fetchQuestions();
   }, []);
+  
 
   // Function to handle answer click
   const handleAnswerClick = (isCorrect: boolean): void => {
